@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Automation" parallel="tests" thread-count="3">
+	<test name="CodeAssignment">
+		<parameter name="browser" value="CH" />
+		<classes>
+			<class name="support.Tests"/>
+		</classes>
+	</test>
+</suite>
