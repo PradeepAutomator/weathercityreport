@@ -1,19 +1,27 @@
 package support;
 
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.paulhammant.ngwebdriver.NgWebDriver;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class Generic {
@@ -60,9 +68,7 @@ public class Generic {
 			WebDriverManager.chromedriver().clearCache();
 			WebDriverManager.chromedriver().setup();
 			ChromeOptions options = new ChromeOptions();
-			options.addArguments("--disable-gpu");
-			options.addArguments("disable-infobars");
-			options.addArguments("--disable-dev-shm-usage");
+			options.addArguments("--disable-notifications");
 			driver = new ChromeDriver(options);
 		}else {
 			throw new RuntimeException("Chrome Browser Type Unsupported");
@@ -73,9 +79,8 @@ public class Generic {
 		try {       
 				waitforElementIsDisplayed(element);
 				element.sendKeys(value); 
-				Thread.sleep(10000);
 			} catch (Exception e) {                                                
-				throw new Exception("setText is not working for :: " + element + " " + e);
+				throw new Exception("Set Text is not working for :: " + element + " " + e);
 			} 
 		
 	}
@@ -92,14 +97,110 @@ public class Generic {
 				}
 			});
 		} catch (Exception e) {
-			throw new Exception("waitforElementIsDisplayed is not working.. :: " + element + " " + e);
+			throw new Exception("Wait for Element to be Displayed is not working.. :: " + element + " " + e);
 		}
 
 	}
+	
+	public void click(WebElement element) throws Exception {
+		try {
+			element.click();
+		} catch (Exception e) {
+			throw new Exception("Click is not  working on:: " + element + " " + e);
+		}
+	}
+	
+	public void actionclick(WebElement element) throws Exception {
+		try {
+			Actions action = new Actions(driver);
+			action.moveToElement(element).click().perform();
+		} catch (Exception e) {
+			throw new Exception("Actions Click is not  working on:: " + element + " " + e);
+		}
+	}
+	
+	public String gettitle() throws Exception {
+		String actualTitle;
+		try {
+			actualTitle = driver.getTitle();
+		}catch (Exception e) {
+			throw new Exception("Get Title click is not  working on:: " + e);
+		}
+		return actualTitle;
+	}
+	
+	public void javascriptclick(WebElement element) throws Exception {
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].click();", element);
+		} catch (Exception e) {
+			throw new Exception("Javascript click is not  working on:: " + element + " " + e);
+		}
+	}
+	
+	public  void waitForPageLoad() {
+		ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
+			public Boolean apply(WebDriver driver) {
+				return ((JavascriptExecutor) driver).executeScript("return document.readyState").toString().equals("complete");
+			}
+		};
+		try {
+			Thread.sleep(5);
+			WebDriverWait wait = new WebDriverWait(driver, 50);
+			wait.until(expectation);
+		} catch (Exception e) {
+			throw new RuntimeException("Timeout waiting for Page Load Request to complete. ", e);
+		}
+	}
+	
+	public void waitForPageLoad(int time) {
+		ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
+			public Boolean apply(WebDriver driver) {
+				return ((JavascriptExecutor) driver).executeScript("return document.readyState").toString().equals("complete");
+			}
+		};
+		try {
+			Thread.sleep(5);
+			WebDriverWait wait = new WebDriverWait(driver, time);
+			wait.until(expectation);
+		} catch (Exception e) {
+			throw new RuntimeException(time + " Sec Timeout waiting for Page Load Request to complete. ", e);
+		}
+	}
+	
+	public List<String> getListWebElementText(List<WebElement> WebElementsList) throws Exception {
+		List<String> getData = new ArrayList<String>();
+		for (WebElement element : WebElementsList) {
+			String text = getText(element);
+			getData.add(text.trim());
+		}
+		return getData;
+	}
+	
+	public String getText(WebElement element) throws Exception {
+		try {
+			return element.getText();
+		} catch (Exception e) {
+			throw new Exception("getText is not working" + e);
 
-	private void waitTime(int i) {
-		// TODO Auto-generated method stub
-		
+		}
+	}
+	public void waitTime(final int secs) throws InterruptedException {
+		Thread.sleep(secs * 1000);
+	}
+	
+	public String captureScreenshot() throws Exception {
+		// Take screenshot and store as a file format
+        File src= ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        String path = "C:/Screenshots/"+System.currentTimeMillis()+".png";
+        try {
+            // now copy the  screenshot to desired location using copyFile //method
+            FileUtils.copyFile(src, new File(path));
+        }catch (Exception e)  {
+        	throw new Exception("Capture Screenshot is not working" + e);
+
+        }
+        return path;
 	}
 	
 }
