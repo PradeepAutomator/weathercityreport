@@ -3,11 +3,14 @@ package support;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -33,6 +36,9 @@ public class Generic {
 	public Generic generic;
 	public String weburl;
 	public String apiurl;
+	public String ErrorMsg = "";
+	public utils.Logger Logger;
+	public String currentweather;
 	
 	public Generic(Generic generic) {
 		this.setGeneric(generic);
@@ -52,13 +58,19 @@ public class Generic {
 		this.browser = browser;
 		WorkingDir = System.getProperty("user.dir");
 		launchbrowser();
+		Logger = new utils.Logger(driver, browser);
+		Logger.setWebDriver(this);
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		driver.manage().timeouts().pageLoadTimeout(40, TimeUnit.SECONDS);
-		driver.manage().deleteAllCookies();
+		//driver.manage().deleteAllCookies();
 		driver.manage().window().maximize();
-		weburl = properties.getProperty("weburl");
-		apiurl = properties.getProperty("apiurl");
-		
+		try {
+			weburl = properties.getProperty("weburl");
+			apiurl = properties.getProperty("apiurl");
+		} catch (Exception e) {
+			driver.manage().deleteAllCookies();
+			driver.navigate().refresh();
+		}
 	}
 	
 	
@@ -69,12 +81,15 @@ public class Generic {
 			WebDriverManager.chromedriver().setup();
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--disable-notifications");
+			Map prefs = new HashMap();
+			prefs.put("profile.default_content_settings.cookies", 2);
+			options.setExperimentalOption("prefs", prefs);
 			driver = new ChromeDriver(options);
 		}else {
 			throw new RuntimeException("Chrome Browser Type Unsupported");
 		}
 	}
-	
+		
 	public void setText(WebElement element, String value) throws Exception {
 		try {       
 				waitforElementIsDisplayed(element);
@@ -175,6 +190,14 @@ public class Generic {
 			getData.add(text.trim());
 		}
 		return getData;
+	}
+	
+	public void clickListWebElementText(List<WebElement> WebElementsList,String selecttext) throws Exception {
+		for (WebElement element : WebElementsList) {
+			if(selecttext.equalsIgnoreCase(getText(element))) {
+				element.click();
+			}
+		}
 	}
 	
 	public String getText(WebElement element) throws Exception {
