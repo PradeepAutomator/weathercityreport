@@ -109,14 +109,14 @@
 			<artifactId>dom4j</artifactId>
 			<version>1.6.1</version>
 		</dependency>
-		<!-- Rest-Assured 4.1.1 - for binding of Rest-Assured to Java -->
-		    <dependency>
-		      <groupId>io.rest-assured</groupId>
-		      <artifactId>rest-assured</artifactId>
-		      <version>4.1.1</version>
-		      <scope>test</scope> <!--   -->
-		    </dependency>
-		
+				
+						<!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
+		<dependency>
+		    <groupId>io.rest-assured</groupId>
+		    <artifactId>rest-assured</artifactId>
+		    <version>4.1.1</version>
+		</dependency>
+				
 		    <!-- jackson-databind 2.9.10 - For interaction with JSON Object-->
 		    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		    <dependency>

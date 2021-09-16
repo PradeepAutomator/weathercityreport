@@ -1,6 +1,8 @@
 package PageWeatherCity;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import org.openqa.selenium.*;
 import org.testng.ITestResult;
@@ -13,15 +15,20 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import APIWeatherCity.WeathercityApi;
 import Pages.WeatherCity;
+import io.restassured.response.Response;
+import io.restassured.response.ResponseOptions;
 import support.Generic;
 
-public class Tests {
+public class Tests extends WeathercityApi{
 	
 	Generic Application = null;
 	public String browser = "";
-	private String WorkingDir = "";
-    String htmlReportPath = ""; 
+    String htmlReportPath = "";
+    ResponseOptions<Response> currentResponse = null;
+    protected static String apicurrenttemp = "";
+    protected static String webcurrenttemp="";
         
 	@Parameters({"browser"})
 	@BeforeTest()
@@ -32,6 +39,7 @@ public class Tests {
 			Application.launchbrowser();
 			Application.driver.manage().window().maximize();
 		}
+		Application.driver.get(Application.weburl);
 	}
 
 	@AfterTest()
@@ -42,19 +50,29 @@ public class Tests {
 	}
 	
 	@Test(dataProvider="Inputdata")
-	public void run(String cityvalue,String drpdownvalue) throws Exception {
-		Application.driver.get(Application.weburl);
+	public void run(String cityvalue,String drpdownvalue,String metrics) throws Exception {
 		WeatherCity weathercity = new WeatherCity(Application);
-		weathercity.captureWeatherCity(cityvalue,drpdownvalue);
-		//Thread.sleep(10000);
-		
+		WeathercityApi weathercityapi = new WeathercityApi();
+		webcurrenttemp = weathercity.captureWeatherCity(cityvalue,drpdownvalue);
+		System.out.println("Web Current temp : " + webcurrenttemp);
+		HashMap<String, Object> requestJson = createRequestJsonFromList(Arrays.asList(cityvalue, metrics));
+        currentResponse = weathercityapi.weatherreportapi(APIKEY, requestJson);
+        String statuscode = weathercityapi.getStatusCode(currentResponse);
+        //System.out.println("Current Status : " + statuscode);
+        apicurrenttemp = weathercityapi.getValueByPath(currentResponse, "main.temp");
+        System.out.println("Api Current temp : " + apicurrenttemp);		
+        float apicurrtemp=Float.parseFloat(apicurrenttemp);
+        float webcurrtemp=Integer.valueOf(webcurrenttemp);
+        //int webcurrtemp=Integer.valueOf(webcurrenttemp);
+        System.out.println("webcurrtemp : " + Math.round(webcurrtemp));
+        System.out.println("apicurrtemp : " + Math.round(apicurrtemp));
+        System.out.println("Temp Difference : " + Math.round(webcurrtemp-apicurrtemp));
 	}
 	
 	@DataProvider(name="Inputdata")
     public static Object[][] getDataFromDataprovider(){
         return new Object[][] {
-        	{ "Chennai","Chennai, Tamil Nadu, IN"}
-            
+        	{ "chennai","Chennai, Tamil Nadu, IN","metric"}        
         };  
 		}
 	

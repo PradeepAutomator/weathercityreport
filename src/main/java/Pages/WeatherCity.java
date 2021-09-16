@@ -28,22 +28,25 @@ public class WeatherCity extends Generic{
 		PageFactory.initElements(driver, this);
 	}
 
-	//*[@class='search-results']//*[@class='search-bar-result search-result'][text()='Wellington, Wellington, NZ']
-	public void captureWeatherCity(String value,String drpdownvalue) throws Exception {
-		String acttitle = generic.gettitle();
-		System.out.println(acttitle);
-		generic.setText(textbox_searchLocation, value);
-		List<WebElement> elements = driver.findElements(By.xpath("//*[@class='search-results']//*[@class='search-bar-result search-result']"));
-		List<String> citydrpdownvalues = generic.getListWebElementText(elements);
-		for (String citydrpdownvalue : citydrpdownvalues) {
-			if(drpdownvalue.equalsIgnoreCase(citydrpdownvalue)) {
-				System.out.println(citydrpdownvalue);
-			}
+	public String captureWeatherCity(String value,String drpdownvalue) throws Exception {
+		try {
+			String acttitle = generic.gettitle();
+			System.out.println(acttitle);
+			generic.setText(textbox_searchLocation, value);
+			List<WebElement> elements = driver.findElements(By.xpath("//*[@class='search-results']//*[@class='search-bar-result search-result']"));
+			List<String> citydrpdownvalues = generic.getListWebElementText(elements); 
+			for(String citydrpdownvalue : citydrpdownvalues) {
+				if(drpdownvalue.equalsIgnoreCase(citydrpdownvalue)) {
+						System.out.println(citydrpdownvalue); } }
+			generic.clickListWebElementText(elements, drpdownvalue);
+			currentweather=generic.getText(text_currweather);
+			currentweather = currentweather.replace("°C", "");
+		}catch(Exception e) {
+			System.out.println("Unable to fetch weather data" + e.getMessage());
+			currentweather ="NA";
 		}
-		generic.clickListWebElementText(elements, drpdownvalue);
-		System.out.println(generic.getText(text_currweather));
-		currentweather=generic.getText(text_currweather);
-		//generic.waitTime(10);
+		return currentweather;
+		
 	}
 	
 

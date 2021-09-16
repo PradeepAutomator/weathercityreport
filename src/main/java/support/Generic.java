@@ -22,6 +22,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.paulhammant.ngwebdriver.NgWebDriver;
@@ -80,6 +81,7 @@ public class Generic {
 			WebDriverManager.chromedriver().clearCache();
 			WebDriverManager.chromedriver().setup();
 			ChromeOptions options = new ChromeOptions();
+			//options.addArguments("--headless", "--start-maximized", "--incognito");
 			options.addArguments("--disable-notifications");
 			Map prefs = new HashMap();
 			prefs.put("profile.default_content_settings.cookies", 2);
@@ -193,10 +195,15 @@ public class Generic {
 	}
 	
 	public void clickListWebElementText(List<WebElement> WebElementsList,String selecttext) throws Exception {
-		for (WebElement element : WebElementsList) {
-			if(selecttext.equalsIgnoreCase(getText(element))) {
-				element.click();
+		try {
+			for (WebElement element : WebElementsList) {
+				if(selecttext.equalsIgnoreCase(getText(element))) {
+					element.click();
+				}
 			}
+		} catch (Exception e) {
+			throw new Exception("clickListWebElementText is not working" + e);
+
 		}
 	}
 	
@@ -215,7 +222,7 @@ public class Generic {
 	public String captureScreenshot() throws Exception {
 		// Take screenshot and store as a file format
         File src= ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-        String path = "C:/Screenshots/"+System.currentTimeMillis()+".png";
+        String path = WorkingDir + "/reports/Screenshots/"+System.currentTimeMillis()+".png";
         try {
             // now copy the  screenshot to desired location using copyFile //method
             FileUtils.copyFile(src, new File(path));
@@ -224,6 +231,11 @@ public class Generic {
 
         }
         return path;
+	}
+	
+	public void tempcomparator() {
+		
+		
 	}
 	
 }
