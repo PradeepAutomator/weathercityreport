@@ -233,8 +233,30 @@ public class Generic {
         return path;
 	}
 	
-	public void tempcomparator() {
+	public void tempcomparator(float webtemp,float apitemp) throws Exception {
+		try {
+			if((Math.round(webtemp))==(Math.round(apitemp))) {
+				System.out.println("Temp comparison between Web : " + webtemp +" and API : " + apitemp +" is similiar");
+			}else {
+				System.out.println("Temp comparison between Web : " + webtemp +" and API : " + apitemp +" is different");
+			}
+		}catch(Exception e) {
+			throw new Exception("tempcomparator is not working " + e);			
+		}
 		
+	}
+	
+	public void tempvariancecheck(float webtemp,float apitemp) throws Exception {
+		try {
+			if(((webtemp-apitemp)<0)||((webtemp-apitemp)>1)) {
+				System.out.println("Temp variance between Web : " + webtemp +" and API : " + apitemp +" is : " + (webtemp-apitemp));
+				throw new Exception("Temp variance between Web : " + webtemp +" and API : " + apitemp +" is : " + (webtemp-apitemp) + " which has failed");
+			}else {
+				System.out.println("Temp variance between Web : " + webtemp +" and API : " + apitemp +" is : " + (webtemp-apitemp));
+			}
+		}catch(Exception e) {
+			throw new Exception("tempvariancecheck is not working " + e);			
+		}
 		
 	}
 	

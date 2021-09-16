@@ -63,10 +63,8 @@ public class Tests extends WeathercityApi{
         System.out.println("Api Current temp : " + apicurrenttemp);		
         float apicurrtemp=Float.parseFloat(apicurrenttemp);
         float webcurrtemp=Integer.valueOf(webcurrenttemp);
-        //int webcurrtemp=Integer.valueOf(webcurrenttemp);
-        System.out.println("webcurrtemp : " + Math.round(webcurrtemp));
-        System.out.println("apicurrtemp : " + Math.round(apicurrtemp));
-        System.out.println("Temp Difference : " + Math.round(webcurrtemp-apicurrtemp));
+        Application.tempcomparator(webcurrtemp, apicurrtemp);
+        Application.tempvariancecheck(webcurrtemp, apicurrtemp);
 	}
 	
 	@DataProvider(name="Inputdata")
