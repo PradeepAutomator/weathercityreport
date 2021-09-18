@@ -20,6 +20,12 @@ import com.relevantcodes.extentreports.LogStatus;
 
 import support.Generic;
 
+/****
+*
+* @author Pradeep
+*
+*/
+
 public class Logger {
 	public ExtentTest Parent;
 	public ExtentTest Logger;
@@ -46,20 +52,16 @@ public class Logger {
 					createDirectoryIfNeeded(WorkingDir + File.separator +"downloads");
 					createDirectoryIfNeeded(ReportsPath);
 					HtmlReport = ReportsPath;
-					createDirectoryIfNeeded(HtmlReport);
+					//createDirectoryIfNeeded(HtmlReport);
 					ScreenShotsPath = ReportsPath + File.separator+ "screenshots";
-						
 					FileUtils.deleteDirectory(new File(ScreenShotsPath));//for delete the existing old screenshots
 					createDirectoryIfNeeded(ScreenShotsPath);
 					extent = new ExtentReports(HtmlReport + File.separator+"AutomationExecutionReport.html", true);
 					Map<String, String> sysInfo = new HashMap<String, String>();
 					Capabilities caps = ((RemoteWebDriver) driver).getCapabilities();
-					sysInfo.put("Selenium Version", "2.46");
-					sysInfo.put("Environment", "Prod");
 					sysInfo.put("Browser", caps.getBrowserName());
 					sysInfo.put("Browser Version", caps.getVersion());
 					sysInfo.put("OS", System.getProperty("os.name"));
-					sysInfo.put("UserName", System.getProperty("user.name"));
 
 					extent.addSystemInfo(sysInfo);
 					extent.config().reportName(browser);

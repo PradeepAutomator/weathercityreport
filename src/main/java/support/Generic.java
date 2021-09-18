@@ -28,6 +28,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.paulhammant.ngwebdriver.NgWebDriver;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
+
+/****
+*
+* @author Pradeep
+*
+*/
+
+
 public class Generic {
 	
 	public static WebDriver driver = null;
@@ -40,6 +48,7 @@ public class Generic {
 	public String ErrorMsg = "";
 	public utils.Logger Logger;
 	public String currentweather;
+	public String variancelimit;
 	
 	public Generic(Generic generic) {
 		this.setGeneric(generic);
@@ -68,6 +77,7 @@ public class Generic {
 		try {
 			weburl = properties.getProperty("weburl");
 			apiurl = properties.getProperty("apiurl");
+			variancelimit = properties.getProperty("variancelimit");
 		} catch (Exception e) {
 			driver.manage().deleteAllCookies();
 			driver.navigate().refresh();
@@ -233,31 +243,40 @@ public class Generic {
         return path;
 	}
 	
-	public void tempcomparator(float webtemp,float apitemp) throws Exception {
+	public boolean tempcomparator(float webtemp,float apitemp) throws Exception {
+		boolean returnvalue;
 		try {
 			if((Math.round(webtemp))==(Math.round(apitemp))) {
-				System.out.println("Temp comparison between Web : " + webtemp +" and API : " + apitemp +" is similiar");
+				returnvalue = true;
+				System.out.println("Temp comparison between Web : " + Math.round(webtemp) +" and API : " + Math.round(apitemp) +" is similiar");
 			}else {
-				System.out.println("Temp comparison between Web : " + webtemp +" and API : " + apitemp +" is different");
+				returnvalue = false;
+				System.out.println("Temp comparison between Web : " + Math.round(webtemp) +" and API : " + Math.round(apitemp) +" is different");
 			}
 		}catch(Exception e) {
+			returnvalue = false;
 			throw new Exception("tempcomparator is not working " + e);			
-		}
-		
+		}		
+		return returnvalue;
 	}
 	
-	public void tempvariancecheck(float webtemp,float apitemp) throws Exception {
+	public boolean tempvariancecheck(float webtemp,float apitemp) throws Exception {
+		boolean returnvalue;
+		int varlimit = Integer.valueOf(variancelimit);
 		try {
-			if(((webtemp-apitemp)<0)||((webtemp-apitemp)>1)) {
-				System.out.println("Temp variance between Web : " + webtemp +" and API : " + apitemp +" is : " + (webtemp-apitemp));
-				throw new Exception("Temp variance between Web : " + webtemp +" and API : " + apitemp +" is : " + (webtemp-apitemp) + " which has failed");
+			if(((webtemp-apitemp)<0)||((webtemp-apitemp)>varlimit)) {
+				returnvalue = false;
+				System.out.println("Temp variance between Web : " + webtemp +" and API : " + apitemp +" is : " + (webtemp-apitemp) + " which has failed due to difference in Variance limit");
+				throw new Exception("Temp variance between Web : " + webtemp +" and API : " + apitemp +" is : " + (webtemp-apitemp) + "  which has failed due to difference in Variance limit");
 			}else {
-				System.out.println("Temp variance between Web : " + webtemp +" and API : " + apitemp +" is : " + (webtemp-apitemp));
+				returnvalue = true;
+				System.out.println("Temp variance between Web : " + webtemp +" and API : " + apitemp +" is : " + (webtemp-apitemp) + " which is in Variance limit");
 			}
 		}catch(Exception e) {
+			returnvalue = false;
 			throw new Exception("tempvariancecheck is not working " + e);			
 		}
-		
+		return returnvalue;
 	}
 	
 }

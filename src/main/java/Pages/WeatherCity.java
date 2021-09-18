@@ -9,6 +9,14 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.Test;
 import support.Generic;
 
+
+/****
+*
+* @author Pradeep
+*
+*/
+
+
 public class WeatherCity extends Generic{
 	
 	@FindBy(css="form > input")
