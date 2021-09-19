@@ -49,13 +49,13 @@ public class Logger {
 					WorkingDir = System.getProperty("user.dir");
 					System.out.println("WorkingDir"+WorkingDir);
 					ReportsPath = WorkingDir + File.separator +"reports";
-					createDirectoryIfNeeded(WorkingDir + File.separator +"downloads");
-					createDirectoryIfNeeded(ReportsPath);
+					createDirectory(WorkingDir + File.separator +"downloads");
+					createDirectory(ReportsPath);
 					HtmlReport = ReportsPath;
 					//createDirectoryIfNeeded(HtmlReport);
 					ScreenShotsPath = ReportsPath + File.separator+ "screenshots";
 					FileUtils.deleteDirectory(new File(ScreenShotsPath));//for delete the existing old screenshots
-					createDirectoryIfNeeded(ScreenShotsPath);
+					createDirectory(ScreenShotsPath);
 					extent = new ExtentReports(HtmlReport + File.separator+"AutomationExecutionReport.html", true);
 					Map<String, String> sysInfo = new HashMap<String, String>();
 					Capabilities caps = ((RemoteWebDriver) driver).getCapabilities();
@@ -75,8 +75,15 @@ public class Logger {
 		this.generic = generic;
 		this.driver = generic.driver;
 	}
-
-	private void createDirectoryIfNeeded(String directoryName) {
+	
+	 /*'#####################################################################################################################################   
+	'Function Name   : createDirectoryIfNeeded    
+	'Purpose         : This function used to create directory if required
+	'Input           : directoryName
+	'Returns         : void    
+	'####################################################################################################################################### */
+	
+	private void createDirectory(String directoryName) {
 		File theDir = new File(directoryName);
 		// if the directory does not exist, create it
 		if (!theDir.exists()) {
@@ -84,7 +91,12 @@ public class Logger {
 		}
 	}
 
-	
+	 /*'#####################################################################################################################################   
+	'Function Name   : createScreenshot    
+	'Purpose         : This function used to take screenshots and return path
+	'Input           : NA
+	'Returns         : String    
+	'####################################################################################################################################### */
 	public synchronized String createScreenshot() {
 		String timeStamp = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new Date());
 		String Path = ScreenShotsPath + File.separator + timeStamp + ".png";
@@ -98,10 +110,24 @@ public class Logger {
 		return Path;
 	}
 
+	 /*'#####################################################################################################################################   
+	'Function Name   : addStep    
+	'Purpose         : This function used to add step in extent report
+	'Input           : string, string2
+	'Returns         : void    
+	'####################################################################################################################################### */
+	
 	public void addStep(String string, String string2) {
 		this.Logger = extent.startTest(string, string2);
 	}
-
+	
+	/*'#####################################################################################################################################   
+	'Function Name   : addsubStep    
+	'Purpose         : This function used to add sub step in extent report
+	'Input           : info, msg, screenshot
+	'Returns         : void    
+	'####################################################################################################################################### */
+	
 	public void addsubStep(LogStatus info, String msg, boolean addScreenshot) {
 		try {
 			Logger.log(info, addScreenshot ? msg + ":" + Logger.addScreenCapture(createScreenshot()) : msg);
@@ -120,11 +146,26 @@ public class Logger {
 					"Unable to capture screenshot. Reason: Browser is closed. Exception:" + e.getMessage());
 		}
 	}
-
+	
+	
+	/*'#####################################################################################################################################   
+	'Function Name   : endStep    
+	'Purpose         : This function used to end step in extent report
+	'Input           : NA
+	'Returns         : void    
+	'####################################################################################################################################### */
+	
 	public void endStep() {
 		Parent.appendChild(this.Logger);
 	}
-
+	
+	/*'#####################################################################################################################################   
+	'Function Name   : addException    
+	'Purpose         : This function used to add exception in extent report
+	'Input           : exception
+	'Returns         : void    
+	'####################################################################################################################################### */
+	
 	public void addException(String ex) {
 		addsubStep(LogStatus.ERROR, ex, true);
 		generic.ErrorMsg = generic.ErrorMsg + ex;

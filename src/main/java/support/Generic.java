@@ -84,7 +84,12 @@ public class Generic {
 		}
 	}
 	
-	
+	/*'#####################################################################################################################################   
+	'Function Name   : launchbrowser    
+	'Purpose         : This function used to launch browser  
+	'Input           : Browser    
+	'Returns         : Void    
+	'####################################################################################################################################### */
 	public void launchbrowser() throws Exception {
 		if((browser).equals("CH")) {
 			System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
@@ -102,6 +107,13 @@ public class Generic {
 		}
 	}
 		
+	/*'#####################################################################################################################################   
+	'Function Name   : setText    
+	'Purpose         : This function used Set Text to textbox  
+	'Input           : Webelement, Value to be entered    
+	'Returns         : Void    
+	'####################################################################################################################################### */
+	
 	public void setText(WebElement element, String value) throws Exception {
 		try {       
 				waitforElementIsDisplayed(element);
@@ -111,6 +123,13 @@ public class Generic {
 			} 
 		
 	}
+	
+	/*'#####################################################################################################################################   
+	'Function Name   : waitforElementIsDisplayed    
+	'Purpose         : This function used to check whether element is displayed 
+	'Input           : Webelement 
+	'Returns         : Void    
+	'####################################################################################################################################### */
 	
 	public void waitforElementIsDisplayed(final WebElement element) throws Exception {
 		try {
@@ -129,6 +148,13 @@ public class Generic {
 
 	}
 	
+	/*'#####################################################################################################################################   
+	'Function Name   : click    
+	'Purpose         : This function used to click button or links
+	'Input           : Webelement 
+	'Returns         : Void    
+	'####################################################################################################################################### */
+	
 	public void click(WebElement element) throws Exception {
 		try {
 			element.click();
@@ -136,6 +162,14 @@ public class Generic {
 			throw new Exception("Click is not  working on:: " + element + " " + e);
 		}
 	}
+	
+	/*'#####################################################################################################################################   
+	'Function Name   : actionclick    
+	'Purpose         : This function used to click button or links using Actions
+	'Input           : Webelement 
+	'Returns         : Void    
+	'####################################################################################################################################### */
+	
 	
 	public void actionclick(WebElement element) throws Exception {
 		try {
@@ -145,6 +179,13 @@ public class Generic {
 			throw new Exception("Actions Click is not  working on:: " + element + " " + e);
 		}
 	}
+	
+	/*'#####################################################################################################################################   
+	'Function Name   : gettitle    
+	'Purpose         : This function used to cget title of WebPage
+	'Input           : NA 
+	'Returns         : String    
+	'####################################################################################################################################### */
 	
 	public String gettitle() throws Exception {
 		String actualTitle;
@@ -156,6 +197,13 @@ public class Generic {
 		return actualTitle;
 	}
 	
+	/*'#####################################################################################################################################   
+	'Function Name   : javascriptclick    
+	'Purpose         : This function used to click button or links using Javacsript
+	'Input           : Webelement 
+	'Returns         : Void    
+	'####################################################################################################################################### */
+	
 	public void javascriptclick(WebElement element) throws Exception {
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -164,6 +212,13 @@ public class Generic {
 			throw new Exception("Javascript click is not  working on:: " + element + " " + e);
 		}
 	}
+	
+	/*'#####################################################################################################################################   
+	'Function Name   : waitForPageLoad    
+	'Purpose         : This function used to wait for Webpage to load
+	'Input           : NA 
+	'Returns         : Void    
+	'####################################################################################################################################### */
 	
 	public  void waitForPageLoad() {
 		ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
@@ -180,6 +235,13 @@ public class Generic {
 		}
 	}
 	
+	/*'#####################################################################################################################################   
+	'Function Name   : waitForPageLoad    
+	'Purpose         : This function used to wait for Webpage to load for particular time
+	'Input           : Time 
+	'Returns         : Void    
+	'####################################################################################################################################### */
+	
 	public void waitForPageLoad(int time) {
 		ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
 			public Boolean apply(WebDriver driver) {
@@ -195,6 +257,14 @@ public class Generic {
 		}
 	}
 	
+	
+	/*'#####################################################################################################################################   
+	'Function Name   : getListWebElementText    
+	'Purpose         : This function used return list of text from webelement
+	'Input           : WebElementsList 
+	'Returns         : List of Strings    
+	'####################################################################################################################################### */
+	
 	public List<String> getListWebElementText(List<WebElement> WebElementsList) throws Exception {
 		List<String> getData = new ArrayList<String>();
 		for (WebElement element : WebElementsList) {
@@ -203,6 +273,13 @@ public class Generic {
 		}
 		return getData;
 	}
+	
+	/*'#####################################################################################################################################   
+	'Function Name   : clickListWebElementText    
+	'Purpose         : This function used to click particular button or link in a list of elements
+	'Input           : WebElementsList, selecttext 
+	'Returns         : Void    
+	'####################################################################################################################################### */
 	
 	public void clickListWebElementText(List<WebElement> WebElementsList,String selecttext) throws Exception {
 		try {
@@ -217,6 +294,13 @@ public class Generic {
 		}
 	}
 	
+	/*'#####################################################################################################################################   
+	'Function Name   : getText    
+	'Purpose         : This function used to get text of a element
+	'Input           : Webelement 
+	'Returns         : String    
+	'####################################################################################################################################### */
+	
 	public String getText(WebElement element) throws Exception {
 		try {
 			return element.getText();
@@ -225,9 +309,24 @@ public class Generic {
 
 		}
 	}
+	
+	/*'#####################################################################################################################################   
+	'Function Name   : waitTime    
+	'Purpose         : This function used to wait for particular time
+	'Input           : secs 
+	'Returns         : Void    
+	'####################################################################################################################################### */
+	
 	public void waitTime(final int secs) throws InterruptedException {
 		Thread.sleep(secs * 1000);
 	}
+	
+	/*'#####################################################################################################################################   
+	'Function Name   : captureScreenshot    
+	'Purpose         : This function used to capture screenshot and return screenshot path
+	'Input           : NA 
+	'Returns         : String    
+	'####################################################################################################################################### */
 	
 	public String captureScreenshot() throws Exception {
 		// Take screenshot and store as a file format
@@ -242,6 +341,13 @@ public class Generic {
         }
         return path;
 	}
+	
+	/*'#####################################################################################################################################   
+	'Function Name   : tempcomparator    
+	'Purpose         : This function used to compare temperature from web and api
+	'Input           : webtemp, apitemp
+	'Returns         : Boolean    
+	'####################################################################################################################################### */
 	
 	public boolean tempcomparator(float webtemp,float apitemp) throws Exception {
 		boolean returnvalue;
@@ -259,6 +365,13 @@ public class Generic {
 		}		
 		return returnvalue;
 	}
+	
+	/*'#####################################################################################################################################   
+	'Function Name   : tempvariancecheck    
+	'Purpose         : This function used to check variance of temperature from web and api
+	'Input           : webtemp, apitemp
+	'Returns         : Boolean    
+	'####################################################################################################################################### */
 	
 	public boolean tempvariancecheck(float webtemp,float apitemp) throws Exception {
 		boolean returnvalue;

@@ -36,6 +36,13 @@ public class WeatherCity extends Generic{
 		PageFactory.initElements(driver, this);
 	}
 
+	 /*'#####################################################################################################################################   
+	'Function Name   : captureWeatherCity    
+	'Purpose         : This function used to capture temperature from web application
+	'Input           : value, dropdown value
+	'Returns         : String    
+	'####################################################################################################################################### */
+	
 	public String captureWeatherCity(String value,String drpdownvalue) throws Exception {
 		try {
 			String acttitle = generic.gettitle();
